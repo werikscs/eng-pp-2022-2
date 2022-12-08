@@ -27,7 +27,7 @@ int main() {
   printVector(vector, vectorSize);
 }
 
-void fillVectorWithRandomNumbers(int * vector, int vectorSize){
+void fillVectorWithRandomNumbers(int * vector, int vectorSize) {
   srand(time(NULL));
 
   for(int i=1; i<= vectorSize; i++)
