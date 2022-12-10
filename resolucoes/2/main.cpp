@@ -2,12 +2,13 @@
 
 #include <iostream>
 #include <cstdlib>
-#include <ctime>
 #include <vector>
 
 using namespace std;
 
-void fillMatrix(std::vector<std::vector<int>>& matrix, int maxNum){
+// fills a matrix with random numbers from 0 to maxNum
+void fillMatrix(vector<vector<int>>& matrix, int maxNum){
+
     srand(time(0));
 
     for(int i = 0; i < matrix.size(); i++){
@@ -17,8 +18,9 @@ void fillMatrix(std::vector<std::vector<int>>& matrix, int maxNum){
     }
 }
 
-void transposeMatrix(std::vector<std::vector<int>>& matrix,
-                     std::vector<std::vector<int>>& transposedMatrix){
+// transposes a given matrix and put the values on transposedMatrix
+void transposeMatrix(vector<vector<int>>& matrix,
+                     vector<vector<int>>& transposedMatrix){
    
     for(int i = 0; i < matrix.size(); i++){
        for(int j = 0; j < matrix[0].size(); j++){
@@ -27,16 +29,19 @@ void transposeMatrix(std::vector<std::vector<int>>& matrix,
     }
 }
 
-void multiplyMatrix(std::vector<std::vector<int>>& matrix,
-                    std::vector<std::vector<int>>& transposedMatrix,
-                    std::vector<std::vector<int>>& productMatrix){
+// multiply matrix and transposedMatrix and puts values on productMatrix
+void multiplyMatrix(vector<vector<int>>& matrix,
+                    vector<vector<int>>& transposedMatrix,
+                    vector<vector<int>>& productMatrix){
     
     int sum = 0;
 
     for(int i = 0; i < matrix.size(); i++){
        for(int j = 0; j < matrix[0].size(); j++){
             for(int k = 0; k < transposedMatrix.size(); k++){
-                sum += matrix[i][k] * transposedMatrix[k][j];
+                // will stay on matrix's row and loop through the columns of the row 
+                // until all the collumns and rows of transposedMatrix are multiplied 
+                sum += matrix[i][k] * transposedMatrix[k][j]; 
             }
 
             productMatrix[i][j] = sum;
@@ -46,7 +51,9 @@ void multiplyMatrix(std::vector<std::vector<int>>& matrix,
     }
 }
 
-void generateIdentityMatrix(std::vector<std::vector<int>>& identityMatrix){
+// fills identityMatrix with proper values
+void generateIdentityMatrix(vector<vector<int>>& identityMatrix){
+
     for(int i = 0; i < identityMatrix.size(); i++){
         for(int j = 0; j < identityMatrix.size(); j++){
             if(j == i){
@@ -59,8 +66,10 @@ void generateIdentityMatrix(std::vector<std::vector<int>>& identityMatrix){
     }
 }
 
-bool verifyOrthogonal(std::vector<std::vector<int>>& matrix){
-    std::vector<std::vector<int>> identityMatrix(matrix.size(), std::vector<int>(matrix.size()));
+// verify if the given matrix is orthogonal
+bool verifyOrthogonal(vector<vector<int>>& matrix){
+
+    vector<vector<int>> identityMatrix(matrix.size(), vector<int>(matrix.size()));
 
     generateIdentityMatrix(identityMatrix);
 
@@ -75,7 +84,8 @@ bool verifyOrthogonal(std::vector<std::vector<int>>& matrix){
     return true;
 }
 
-void showMatrix(std::vector<std::vector<int>>& matrix){
+// show the matrix that was passed on the terminal's scream
+void showMatrix(vector<vector<int>>& matrix){
 
     for(int i = 0; i < matrix.size(); i++){
         for(int j = 0; j < matrix[i].size(); j++){
@@ -89,9 +99,9 @@ void showMatrix(std::vector<std::vector<int>>& matrix){
 int main() {
     int matrixOrder = 4;
     int maxNum = 30;
-    std::vector<std::vector<int>> matrix(matrixOrder, std::vector<int>(matrixOrder));
-    std::vector<std::vector<int>> transposedMatrix(matrixOrder, std::vector<int>(matrixOrder));
-    std::vector<std::vector<int>> productMatrix(matrixOrder, std::vector<int>(matrixOrder));
+    vector<vector<int>> matrix(matrixOrder, vector<int>(matrixOrder));
+    vector<vector<int>> transposedMatrix(matrixOrder, vector<int>(matrixOrder));
+    vector<vector<int>> productMatrix(matrixOrder, vector<int>(matrixOrder));
 
     fillMatrix(matrix, maxNum);  
     
