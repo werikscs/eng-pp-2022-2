@@ -47,22 +47,18 @@ int findLargestValueVector(vector<int>& vector, int index) {
   if(index == (vector.size() - 1))
     return vector[index];
 
-  else{
-    // gets the largest value as the last one of the vector, and 
-    // then compares it to the other values of the vector as the functions goes back
-    // to the first position
-    int largestNum = findLargestValueVector(vector, index+1);
-    
-    // if current value is larger than the returned value, returns
+  else{    
+
+    // if current value is greater than the returned value of the call, returns
     // current value to the previous call of the function
-    if(vector[index] > largestNum){
+    if(vector[index] > findLargestValueVector(vector, index+1)){
       return vector[index];
     }
 
-    // if current value is not larger than the returned value, returns
-    // the largest values returned by the next call to the previous call of the function
+    // if current value is not greater than the returned value, it means
+    // that vector[i+1] is greater than vector[i]. So it returns vector[i+1]
     else{
-      return largestNum;
+      return vector[i+1];
     }
   }
 }   
