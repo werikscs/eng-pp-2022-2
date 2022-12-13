@@ -3,49 +3,66 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <vector>
 
 using namespace std;
 
-void fillVectorWithRandomNumbers(int *, int, int);
-int findLargestValueVector(int, int *, int, int);
+void fillVectorWithRandomNumbers(vector<int>& vector, int);
+int findLargestValueVector(vector<int>& vector, int);
 
 int main() {
 
   int vectorSize = 50;
-	int vector[vectorSize] = {};
+	vector<int> vector(vectorSize);
   int maxNum = 100;
 
   int largestValue;
   
-  fillVectorWithRandomNumbers(vector, vectorSize, maxNum);
+  fillVectorWithRandomNumbers(vector, maxNum);
 
   cout << "Vector: ";
-  for(int i=0; i<vectorSize; i++)
+  for(int i = 0; i < vector.size(); i++)
     cout << vector[i] << " ";
 
   cout << endl;
 
-  largestValue = findLargestValueVector(vector[0], vector, vectorSize, 1);
+  largestValue = findLargestValueVector(vector, 0);
 
   cout << "Largest value: " << largestValue << endl;
 
   return 0;
 }
 
-void fillVectorWithRandomNumbers(int * vector, int vectorSize, int maxNum) {
+void fillVectorWithRandomNumbers(vector<int>& vector, int maxNum) {
   srand(time(NULL));
 
-  for(int i=0; i<vectorSize; i++) {
+  for(int i = 0; i < vector.size(); i++) {
     vector[i] = 1 + (rand() % maxNum);
   }
 }
 
-int findLargestValueVector(int largestNum, int * vector, int vectorSize, int index) {
-  if(index == vectorSize - 1)
-    return largestNum;
-  else
-    if(vector[index] > largestNum)
-      return findLargestValueVector(vector[index], vector, vectorSize, index + 1);
-    else
-      return findLargestValueVector(largestNum, vector, vectorSize, index + 1);
+int findLargestValueVector(vector<int>& vector, int index) {
+
+  // returns the value when it reaches the end of the vector
+  if(index == (vector.size() - 1))
+    return vector[index];
+
+  else{
+    // gets the largest value as the last one of the vector, and 
+    // then compares it to the other values of the vector as the functions goes back
+    // to the first position
+    int largestNum = findLargestValueVector(vector, index+1);
+    
+    // if current value is larger than the returned value, returns
+    // current value to the previous call of the function
+    if(vector[index] > largestNum){
+      return vector[index];
+    }
+
+    // if current value is not larger than the returned value, returns
+    // the largest values returned by the next call to the previous call of the function
+    else{
+      return largestNum;
+    }
+  }
 }   
