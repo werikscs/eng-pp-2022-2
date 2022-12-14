@@ -49,16 +49,15 @@ int findLargestValueVector(vector<int>& vector, int index) {
 
   else{    
 
+    int largestValue = findLargestValueVector(vector, index+1);
+
     // if current value is greater than the returned value of the call, returns
     // current value to the previous call of the function
-    if(vector[index] > findLargestValueVector(vector, index+1)){
+    if(vector[index] >= largestValue){
       return vector[index];
     }
-
-    // if current value is not greater than the returned value, it means
-    // that vector[i+1] is greater than vector[i]. So it returns vector[i+1]
     else{
-      return vector[i+1];
+      return largestValue;
     }
   }
 }   
