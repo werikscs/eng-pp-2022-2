@@ -1,4 +1,4 @@
-// gcc main.cpp -lstdc++ -o main && ./main
+// Davi Carvalho, Wériks da Conceição Santos, Israel David Caetano
 
 #include <iostream>
 #include <vector>
@@ -93,5 +93,4 @@ int main() {
     organizeVector(vector, 0);
     
     showVector(vector);
-    
 }
