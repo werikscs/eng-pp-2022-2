@@ -7,10 +7,9 @@ using namespace std;
 int calculateRecursiveExponential(int a, int b);
 
 int main() {
-  
   int a, b;
   int result;
-  
+
   do {
     cout << "\nEnter a (must be non-zero): ";
     cin >> a;
@@ -28,7 +27,7 @@ int main() {
 }
 
 int calculateRecursiveExponential(int a, int b) {
-  if(b == 0)
+  if (b == 0)
     return 1;
   else
     return a * calculateRecursiveExponential(a, b - 1);

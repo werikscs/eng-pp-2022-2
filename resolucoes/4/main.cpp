@@ -1,8 +1,8 @@
 // Davi Carvalho, Wériks da Conceição Santos, Israel David Caetano
 
-#include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <iostream>
 #include <vector>
 
 using namespace std;
@@ -17,8 +17,8 @@ void printVector(vector<int>& vector);
 int main() {
   int vectorSize = 30;
   int maxNum = 30;
-	vector<int> vector(vectorSize);
-  
+  vector<int> vector(vectorSize);
+
   // filling
   fillVectorWithRandomNumbers(vector, maxNum);
   // before sorting
@@ -32,22 +32,21 @@ int main() {
 void fillVectorWithRandomNumbers(vector<int>& vector, int maxNum) {
   srand(time(NULL));
 
-  for(int i = 0; i < vector.size(); i++)
-    vector[i] = (rand() % maxNum) + 1;
+  for (int i = 0; i < vector.size(); i++) vector[i] = (rand() % maxNum) + 1;
 }
 
 void sortVectorNonAscending(vector<int>& vector) {
   int i, j, maxPosition, aux;
 
-  for(i = 0; i < vector.size(); i++) {
-
+  for (i = 0; i < vector.size(); i++) {
     maxPosition = i;
 
-    // loops through the rest of the vector and gets the position of the major value
-    for(int j = i; j < vector.size(); j++){
-        if(vector[j] >= vector[maxPosition]){
-            maxPosition = j;
-        }
+    // loops through the rest of the vector and gets the position of the major
+    // value
+    for (int j = i; j < vector.size(); j++) {
+      if (vector[j] >= vector[maxPosition]) {
+        maxPosition = j;
+      }
     }
 
     // swaps values
@@ -58,7 +57,7 @@ void sortVectorNonAscending(vector<int>& vector) {
 }
 
 void printVector(vector<int>& vector) {
-  for(int i = 0; i < vector.size(); i++){
+  for (int i = 0; i < vector.size(); i++) {
     cout << vector[i] << " ";
   }
 

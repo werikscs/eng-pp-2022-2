@@ -1,6 +1,7 @@
 // Davi Carvalho, Wériks da Conceição Santos, Israel David Caetano
 
 #include <math.h>
+
 #include <cstdlib>
 #include <iostream>
 #include <vector>
