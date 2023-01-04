@@ -13,8 +13,8 @@ void printText(string text) { cout << text << endl; }
 
 int main() {
   // threads call printText with the argument
-  std::thread t1(printText, "Feliz Natal");
-  std::thread t2(printText, "Feliz Ano Novo");
+  thread t1(printText, "Feliz Natal");
+  thread t2(printText, "Feliz Ano Novo");
 
   // synchronize threads
   t1.join();
