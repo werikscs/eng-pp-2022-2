@@ -52,6 +52,7 @@ int main() {
   cout << "Digite outro número (número ≠ 0): ";
   cin >> b;
 
+  srand(1032013);
   thread t_soma(subtrair, a, b, rand() % 20 + 1);
   thread t_subtracao(somar, a, b, rand() % 20 + 1);
   thread t_multiplicacao(multiplicar, a, b, rand() % 20 + 1);
