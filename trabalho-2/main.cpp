@@ -17,26 +17,31 @@ void printPosSleep(string operacao, float value, int time) {
 }
 
 void subtrair(float a, float b, int time) {
-  printPreSleep("SUBTRACAO", a - b, time);
+  const float operacao = a - b;
+  printPreSleep("SUBTRACAO", operacao, time);
   sleep(time);
-  printPosSleep("SUBTRACAO", a - b, time);
+  printPosSleep("SUBTRACAO", operacao, time);
 }
 void somar(float a, float b, int time) {
-  printPreSleep("SOMA", a + b, time);
+  const float operacao = a + b;
+  printPreSleep("SOMA", operacao, time);
   sleep(time);
-  printPosSleep("SOMA", a + b, time);
+  printPosSleep("SOMA", operacao, time);
 }
 void multiplicar(float a, float b, int time) {
-  printPreSleep("MULTIPLICACAO", a * b, time);
+  const float operacao = a * b;
+  printPreSleep("MULTIPLICACAO", operacao, time);
   sleep(time);
-  printPosSleep("MULTIPLICACAO", a * b, time);
+  printPosSleep("MULTIPLICACAO", operacao, time);
 }
 void dividir(float a, float b, int time) {
   if (b == 0)
     throw "Deu ruim";
-  printPreSleep("DIVISAO", a / b, time);
+
+  const float operacao = a / b;
+  printPreSleep("DIVISAO", operacao, time);
   sleep(time);
-  printPosSleep("DIVISAO", a / b, time);
+  printPosSleep("DIVISAO", operacao, time);
 }
 
 int main() {
