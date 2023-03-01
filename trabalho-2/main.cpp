@@ -1,8 +1,10 @@
-//Israel David, 
-#include <iostream>
+// Davi Carvalho, Wériks da Conceição Santos, Israel David Caetano
+
 #include <stdlib.h>
-#include <thread>
 #include <unistd.h>
+
+#include <iostream>
+#include <thread>
 
 using namespace std;
 
