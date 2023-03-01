@@ -4,6 +4,7 @@
 #include <chrono>
 #include <iostream>
 #include <thread>
+#include <cmath>
 
 using namespace std;
 
@@ -43,13 +44,15 @@ int main() {
 }
 
 void printPreSleep(string operacao, float value, int time) {
-  cout << "Eu sou a Thread " << operacao << " (" << value
-       << ") e vou dormir por " << time << " segundos!" << endl;
+  string msg = "Eu sou a Thread " + operacao + " (" + to_string(value) +
+    ") e vou dormir por " + to_string(time) + " segundos!\n";
+  cout << msg;
 }
 
 void printPosSleep(string operacao, float value, int time) {
-  cout << "Eu sou a Thread " << operacao << " (" << value
-       << "). Já se passaram " << time << " segundos, então terminei!" << endl;
+  string msg = "Eu sou a Thread " + operacao + " (" + to_string(value) + 
+    "). Já se passaram " + to_string(time) + " segundos, então terminei!\n";
+  cout << msg;
 }
 
 void subtrair(float a, float b, int time) {
