@@ -10,35 +10,45 @@ using namespace std;
 sem_t semSum, semSub, semMult, semDiv;
 
 // performs sum
-void sum(int a, int b, int time) {
-    sem_wait(&semSum);
-    this_thread::sleep_for(chrono::seconds(time));
-    cout << "Sum: " << a + b << endl;
-    sem_post(&semSub);
+void sum(int a, int b, int time, int N) {
+    for(int i = 0; i < N; i++){
+        sem_wait(&semSum);
+
+        this_thread::sleep_for(chrono::seconds(time));
+        cout << "Sum: " << a + b << endl;
+
+        sem_post(&semSub);
+    }
 }
 
 // performs subtraction
-void sub(int a, int b, int time) {
-    sem_wait(&semSub);
-    this_thread::sleep_for(chrono::seconds(time));
-    cout << "Sub: " << a - b << endl;
-    sem_post(&semMult);
+void sub(int a, int b, int time, int N) {
+    for(int i = 0; i < N; i++){
+        sem_wait(&semSub);
+        this_thread::sleep_for(chrono::seconds(time));
+        cout << "Sub: " << a - b << endl;
+        sem_post(&semMult);
+    }
 }
 
 // performs multiplication
-void mult(int a, int b, int time) {
-    sem_wait(&semMult);
-    this_thread::sleep_for(chrono::seconds(time));
-    cout << "Mult: " << a * b << endl;
-    sem_post(&semDiv);
+void mult(int a, int b, int time, int N) {
+    for(int i = 0; i < N; i++){
+        sem_wait(&semMult);
+        this_thread::sleep_for(chrono::seconds(time));
+        cout << "Mult: " << a * b << endl;
+        sem_post(&semDiv);
+    }
 }
 
 // performs division
-void division(int a, int b, int time) {
-    sem_wait(&semDiv);
-    this_thread::sleep_for(chrono::seconds(time));
-    cout << "Div: " << a / b << endl;
-    sem_post(&semSum);
+void division(int a, int b, int time, int N) {
+    for(int i = 0; i < N; i++){
+        sem_wait(&semDiv);
+        this_thread::sleep_for(chrono::seconds(time));
+        cout << "Div: " << a / b << endl;
+        sem_post(&semSum);
+    }
 }
 
 int main() {
@@ -86,21 +96,15 @@ int main() {
 
     cout << "---------------------------" << endl;
 
-    for(int i = 1; i <= N; i++){
-        cout << "Iteration number: " << i <<endl;
+    thread t1(sum, a, b, 1, N);
+    thread t2(sub, a, b, 1, N);
+    thread t3(mult, a, b, 1, N);
+    thread t4(division, a, b, 1, N);
 
-        thread t1(sum, a, b, sum_time);
-        thread t2(sub, a, b, sub_time);
-        thread t3(mult, a, b, mult_time);
-        thread t4(division, a, b, division_time);
-
-        t1.join();
-        t2.join();
-        t3.join();
-        t4.join();
-
-        cout << "---------------------------" << endl;
-    }
+    t1.join();
+    t2.join();
+    t3.join();
+    t4.join();
 
     // destroy semaphores
     sem_destroy(&semSum);
