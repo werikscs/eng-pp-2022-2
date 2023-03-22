@@ -36,7 +36,7 @@ int main() {
 
   cout << "---------------------------" << endl;
 
-  srand(1032013);
+  srand(22032023);
 
   int so_time = rand() % 10 + 1;
   int su_time = rand() % 10 + 1;
