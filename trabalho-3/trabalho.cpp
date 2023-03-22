@@ -1,22 +1,20 @@
 #include <chrono>
 #include <iostream>
-#include <semaphore.h>
+#include <semaphore>
 #include <thread>
 
 using namespace std;
 
-void soma(float, float, int, int, sem_t *, sem_t *);
-void subt(float, float, int, int, sem_t *, sem_t *);
-void mult(float, float, int, int, sem_t *, sem_t *);
-void divi(float, float, int, int, sem_t *, sem_t *);
+void soma(binary_semaphore *, binary_semaphore *, float, float, int, int);
+void subt(binary_semaphore *, binary_semaphore *, float, float, int, int);
+void mult(binary_semaphore *, binary_semaphore *, float, float, int, int);
+void divi(binary_semaphore *, binary_semaphore *, float, float, int, int);
 
 int main() {
-  sem_t semSo, semSu, semMu, semDi;
-  
-  sem_init(&semSo, 0, 1);
-  sem_init(&semSu, 0, 0);
-  sem_init(&semMu, 0, 0);
-  sem_init(&semDi, 0, 0);
+  binary_semaphore sem_So{0};
+  binary_semaphore sem_Su{0};
+  binary_semaphore sem_Mu{0};
+  binary_semaphore sem_Di{0};
 
   float a, b = 0;
   int N = 0;
@@ -50,56 +48,51 @@ int main() {
 
   cout << "---------------------------" << endl;
 
-  thread t1(soma, a, b, so_time, N, &semSo, &semSu);
-  thread t2(subt, a, b, su_time, N, &semSu, &semMu);
-  thread t3(mult, a, b, mu_time, N, &semMu, &semDi);
-  thread t4(divi, a, b, di_time, N, &semDi, &semSo);
+  thread th_so(soma, &sem_So, &sem_Su, a, b, so_time, N);
+  thread th_su(subt, &sem_Su, &sem_Mu, a, b, su_time, N);
+  thread th_mu(mult, &sem_Mu, &sem_Di, a, b, mu_time, N);
+  thread th_di(divi, &sem_Di, &sem_So, a, b, di_time, N);
 
-  t1.join();
-  t2.join();
-  t3.join();
-  t4.join();
+  sem_So.release();
 
-  sem_destroy(&semSo);
-  sem_destroy(&semSu);
-  sem_destroy(&semMu);
-  sem_destroy(&semDi);
-
-  return 0;
+  th_so.join();
+  th_su.join();
+  th_mu.join();
+  th_di.join();
 }
 
-void soma(float a, float b, int time, int N, sem_t *sem_to_lock, sem_t *sem_to_unlock) {
+void soma(binary_semaphore * sem_to_acquire, binary_semaphore * sem_to_release, float a, float b, int time, int N) {
   for (int i = 0; i < N; i++) {
-    sem_wait(sem_to_lock);
+    sem_to_acquire->acquire();
     this_thread::sleep_for(chrono::seconds(time));
-    cout << "N: " << i+1 << ", Op - So: " << a << " + " << b << " = " << a+b << endl;
-    sem_post(sem_to_unlock);
+    cout << "N: " << i + 1 << ", Op - So: " << a << " + " << b << " = " << a + b << endl;     
+    sem_to_release->release(); 
   }
 }
 
-void subt(float a, float b, int time, int N, sem_t *sem_to_lock, sem_t *sem_to_unlock) {
+void subt(binary_semaphore * sem_to_acquire, binary_semaphore * sem_to_release, float a, float b, int time, int N) {
   for (int i = 0; i < N; i++) {
-    sem_wait(sem_to_lock);
+    sem_to_acquire->acquire();
     this_thread::sleep_for(chrono::seconds(time));
-    cout << "N: " << i+1 << ", Op - Su: " << a << " - " << b << " = " << a-b << endl;
-    sem_post(sem_to_unlock);
+    cout << "N: " << i + 1 << ", Op - Su: " << a << " - " << b << " = " << a - b << endl;     
+    sem_to_release->release(); 
   }
 }
 
-void mult(float a, float b, int time, int N, sem_t *sem_to_lock, sem_t *sem_to_unlock) {
+void mult(binary_semaphore * sem_to_acquire, binary_semaphore * sem_to_release, float a, float b, int time, int N) {
   for (int i = 0; i < N; i++) {
-    sem_wait(sem_to_lock);
+    sem_to_acquire->acquire();
     this_thread::sleep_for(chrono::seconds(time));
-    cout << "N: " << i+1 << ", Op - Mu: " << a << " x " << b << " = " << a*b << endl;
-    sem_post(sem_to_unlock);
+    cout << "N: " << i + 1 << ", Op - Mu: " << a << " x " << b << " = " << a * b << endl;
+    sem_to_release->release(); 
   }
 }
 
-void divi(float a, float b, int time, int N, sem_t *sem_to_lock, sem_t *sem_to_unlock) {
+void divi(binary_semaphore * sem_to_acquire, binary_semaphore * sem_to_release, float a, float b, int time, int N) {
   for (int i = 0; i < N; i++) {
-    sem_wait(sem_to_lock);
+    sem_to_acquire->acquire();
     this_thread::sleep_for(chrono::seconds(time));
-    cout << "N: " << i+1 << ", Op - Di: " << a << " / " << b << " = " << a/b << endl;
-    sem_post(sem_to_unlock);
+    cout << "N: " << i + 1 << ", Op - Di: " << a << " / " << b << " = " << a / b << endl;
+    sem_to_release->release(); 
   }
 }
