@@ -37,7 +37,7 @@ void mult(int a, int b, int time, int N) {
         sem_wait(&semMult);
         this_thread::sleep_for(chrono::seconds(time));
         cout << "Mult: " << a * b << endl;
-        sem_post(&semDiv);
+        sem_post(&semDiv); 
     }
 }
 
@@ -96,10 +96,10 @@ int main() {
 
     cout << "---------------------------" << endl;
 
-    thread t1(sum, a, b, 1, N);
-    thread t2(sub, a, b, 1, N);
-    thread t3(mult, a, b, 1, N);
-    thread t4(division, a, b, 1, N);
+    thread t1(sum, a, b, sum_time, N);
+    thread t2(sub, a, b, sub_time, N);
+    thread t3(mult, a, b, mult_time, N);
+    thread t4(division, a, b, division_time, N);
 
     t1.join();
     t2.join();
