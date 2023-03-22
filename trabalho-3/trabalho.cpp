@@ -1,116 +1,105 @@
-#include <iostream>
-#include <thread>
-#include <semaphore.h>
-#include <iostream>
 #include <chrono>
+#include <iostream>
+#include <semaphore.h>
+#include <thread>
 
 using namespace std;
 
-// declare global variables
-sem_t semSum, semSub, semMult, semDiv;
-
-// performs sum
-void sum(int a, int b, int time, int N) {
-    for(int i = 0; i < N; i++){
-        sem_wait(&semSum);
-
-        this_thread::sleep_for(chrono::seconds(time));
-        cout << "Sum: " << a + b << endl;
-
-        sem_post(&semSub);
-    }
-}
-
-// performs subtraction
-void sub(int a, int b, int time, int N) {
-    for(int i = 0; i < N; i++){
-        sem_wait(&semSub);
-        this_thread::sleep_for(chrono::seconds(time));
-        cout << "Sub: " << a - b << endl;
-        sem_post(&semMult);
-    }
-}
-
-// performs multiplication
-void mult(int a, int b, int time, int N) {
-    for(int i = 0; i < N; i++){
-        sem_wait(&semMult);
-        this_thread::sleep_for(chrono::seconds(time));
-        cout << "Mult: " << a * b << endl;
-        sem_post(&semDiv); 
-    }
-}
-
-// performs division
-void division(int a, int b, int time, int N) {
-    for(int i = 0; i < N; i++){
-        sem_wait(&semDiv);
-        this_thread::sleep_for(chrono::seconds(time));
-        cout << "Div: " << a / b << endl;
-        sem_post(&semSum);
-    }
-}
+void soma(float, float, int, int, sem_t *, sem_t *);
+void subt(float, float, int, int, sem_t *, sem_t *);
+void mult(float, float, int, int, sem_t *, sem_t *);
+void divi(float, float, int, int, sem_t *, sem_t *);
 
 int main() {
-    // initializes the semaphores
-    sem_init(&semSum, 0, 1);
-    sem_init(&semSub, 0, 0);
-    sem_init(&semMult, 0, 0);
-    sem_init(&semDiv, 0, 0);
+  sem_t semSo, semSu, semMu, semDi;
+  
+  sem_init(&semSo, 0, 1);
+  sem_init(&semSu, 0, 0);
+  sem_init(&semMu, 0, 0);
+  sem_init(&semDi, 0, 0);
 
-    int a, b, N;
-    
-    cout << "Digite um numero 'a': " << endl;
-    cin >> a;
-    cout << "Digite um número 'b' ('b' ≠ 0): " << endl;
+  float a, b = 0;
+  int N = 0;
+
+  cout << "Digite um numero 'a': ";
+  cin >> a;
+
+  while (b == 0) {
+    cout << "Digite um número 'b' ('b' ≠ 0): ";
     cin >> b;
+  }
 
-    while(b == 0){
-        cout << "Número 'b' igual a zero!" << endl;
-        cout << "Digite número 'b' ('b' ≠ 0): " << endl;
-        cin >> b;
-    }
-
-    cout << "Digite um N (N >= 1): " << endl;
+  while (N < 1) {
+    cout << "Digite um número 'N' (N >= 1): ";
     cin >> N;
+  }
 
-    while(N < 1){
-        cout << "Número N menor que um!" << endl;
-        cout << "Digite um N (N >= 1): " << endl;
-        cin >> N;
-    }
+  cout << "---------------------------" << endl;
 
-    cout << "---------------------------" << endl;
+  srand(1032013);
 
-    srand(1032013);
+  int so_time = rand() % 10 + 1;
+  int su_time = rand() % 10 + 1;
+  int mu_time = rand() % 10 + 1;
+  int di_time = rand() % 10 + 1;
 
-    int sum_time = rand() % 10 + 1;
-    int sub_time = rand() % 10 + 1;
-    int mult_time = rand() % 10 + 1;
-    int division_time = rand() % 10 + 1;
+  cout << "Tempo - So: " << so_time << "s" << endl;
+  cout << "Tempo - Su: " << su_time << "s" << endl;
+  cout << "Tempo - Mu: " << mu_time << "s" << endl;
+  cout << "Tempo - Di: " << di_time << "s" << endl;
 
-    cout << "Sum Time: " << sum_time << endl;
-    cout << "Sub Time: " << sub_time << endl;
-    cout << "Mult Time: " << mult_time << endl;
-    cout << "Division Time: " << division_time << endl;
+  cout << "---------------------------" << endl;
 
-    cout << "---------------------------" << endl;
+  thread t1(soma, a, b, so_time, N, &semSo, &semSu);
+  thread t2(subt, a, b, su_time, N, &semSu, &semMu);
+  thread t3(mult, a, b, mu_time, N, &semMu, &semDi);
+  thread t4(divi, a, b, di_time, N, &semDi, &semSo);
 
-    thread t1(sum, a, b, sum_time, N);
-    thread t2(sub, a, b, sub_time, N);
-    thread t3(mult, a, b, mult_time, N);
-    thread t4(division, a, b, division_time, N);
+  t1.join();
+  t2.join();
+  t3.join();
+  t4.join();
 
-    t1.join();
-    t2.join();
-    t3.join();
-    t4.join();
+  sem_destroy(&semSo);
+  sem_destroy(&semSu);
+  sem_destroy(&semMu);
+  sem_destroy(&semDi);
 
-    // destroy semaphores
-    sem_destroy(&semSum);
-    sem_destroy(&semSub);
-    sem_destroy(&semMult);
-    sem_destroy(&semDiv);
+  return 0;
+}
 
-    return 0;
+void soma(float a, float b, int time, int N, sem_t *sem_to_lock, sem_t *sem_to_unlock) {
+  for (int i = 0; i < N; i++) {
+    sem_wait(sem_to_lock);
+    this_thread::sleep_for(chrono::seconds(time));
+    cout << "N: " << i+1 << ", Op - So: " << a << " + " << b << " = " << a+b << endl;
+    sem_post(sem_to_unlock);
+  }
+}
+
+void subt(float a, float b, int time, int N, sem_t *sem_to_lock, sem_t *sem_to_unlock) {
+  for (int i = 0; i < N; i++) {
+    sem_wait(sem_to_lock);
+    this_thread::sleep_for(chrono::seconds(time));
+    cout << "N: " << i+1 << ", Op - Su: " << a << " - " << b << " = " << a-b << endl;
+    sem_post(sem_to_unlock);
+  }
+}
+
+void mult(float a, float b, int time, int N, sem_t *sem_to_lock, sem_t *sem_to_unlock) {
+  for (int i = 0; i < N; i++) {
+    sem_wait(sem_to_lock);
+    this_thread::sleep_for(chrono::seconds(time));
+    cout << "N: " << i+1 << ", Op - Mu: " << a << " x " << b << " = " << a*b << endl;
+    sem_post(sem_to_unlock);
+  }
+}
+
+void divi(float a, float b, int time, int N, sem_t *sem_to_lock, sem_t *sem_to_unlock) {
+  for (int i = 0; i < N; i++) {
+    sem_wait(sem_to_lock);
+    this_thread::sleep_for(chrono::seconds(time));
+    cout << "N: " << i+1 << ", Op - Di: " << a << " / " << b << " = " << a/b << endl;
+    sem_post(sem_to_unlock);
+  }
 }
