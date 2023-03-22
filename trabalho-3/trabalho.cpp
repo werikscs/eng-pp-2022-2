@@ -13,7 +13,7 @@ sem_t semSum, semSub, semMult, semDiv;
 void sum(int a, int b, int time) {
     sem_wait(&semSum);
     this_thread::sleep_for(chrono::seconds(time));
-    cout << a + b << endl;
+    cout << "Sum: " << a + b << endl;
     sem_post(&semSub);
 }
 
@@ -21,7 +21,7 @@ void sum(int a, int b, int time) {
 void sub(int a, int b, int time) {
     sem_wait(&semSub);
     this_thread::sleep_for(chrono::seconds(time));
-    cout << a - b << endl;
+    cout << "Sub: " << a - b << endl;
     sem_post(&semMult);
 }
 
@@ -29,7 +29,7 @@ void sub(int a, int b, int time) {
 void mult(int a, int b, int time) {
     sem_wait(&semMult);
     this_thread::sleep_for(chrono::seconds(time));
-    cout << a * b << endl;
+    cout << "Mult: " << a * b << endl;
     sem_post(&semDiv);
 }
 
@@ -37,7 +37,7 @@ void mult(int a, int b, int time) {
 void division(int a, int b, int time) {
     sem_wait(&semDiv);
     this_thread::sleep_for(chrono::seconds(time));
-    cout << a / b << endl;
+    cout << "Div: " << a / b << endl;
     sem_post(&semSum);
 }
 
@@ -70,6 +70,8 @@ int main() {
         cin >> N;
     }
 
+    cout << "---------------------------" << endl;
+
     srand(1032013);
 
     int sum_time = rand() % 10 + 1;
@@ -81,6 +83,8 @@ int main() {
     cout << "Sub Time: " << sub_time << endl;
     cout << "Mult Time: " << mult_time << endl;
     cout << "Division Time: " << division_time << endl;
+
+    cout << "---------------------------" << endl;
 
     for(int i = 1; i <= N; i++){
         cout << "Iteration number: " << i <<endl;
@@ -95,12 +99,14 @@ int main() {
         t3.join();
         t4.join();
 
-        // destroy semaphores
-        sem_destroy(&semSum);
-        sem_destroy(&semSub);
-        sem_destroy(&semMult);
-        sem_destroy(&semDiv);
+        cout << "---------------------------" << endl;
     }
+
+    // destroy semaphores
+    sem_destroy(&semSum);
+    sem_destroy(&semSub);
+    sem_destroy(&semMult);
+    sem_destroy(&semDiv);
 
     return 0;
 }
