@@ -8,7 +8,7 @@
 
 using namespace std;
 
-void print_matrix(const vector<vector<int>>& matrix, int n);
+void print_square_matrix(const vector<vector<int>>& matrix, int n);
 
 void resolve_linear_system(const vector<vector<int>>& matrix, vector<double>& x,
                            vector<int>& b, int n, double& sum, int& turn,
@@ -38,7 +38,7 @@ int main() {
 
   vector<double> x(n, 0);
 
-  print_matrix(matrix, n);
+  print_square_matrix(matrix, n);
 
   thread t1(resolve_linear_system, matrix, ref(x), ref(b), n, ref(sum),
             ref(turn), ref(i), ref(mtx), ref(cv));
@@ -57,7 +57,7 @@ int main() {
   return 0;
 }
 
-void print_matrix(const vector<vector<int>>& matrix, int n) {
+void print_square_matrix(const vector<vector<int>>& matrix, int n) {
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < n; j++) {
       cout << matrix[i][j] << " ";
